@@ -10,9 +10,9 @@ import gym
 from gym import wrappers
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
-
-# Dictonary to store the average success rate for every 5000 episodes
+# Dictonary to store the average success rate for every 500 episodes
 success_per_episode_dict = {}
 
 
@@ -72,7 +72,7 @@ def cross_lake(alpha=0.1, epsilon=0.2):
             success_rate = sum(rList) / i
             success_per_episode_list.append(success_rate)
             # print(f"Success rate of {i}th episode: {success_rate:.3f}")
-                 
+        
     avg_success_rate = sum(rList) / num_episodes
     # print(f"Average Success rate: {avg_success_rate:.3f}")
     success_per_episode_list.append(avg_success_rate)
@@ -81,22 +81,59 @@ def cross_lake(alpha=0.1, epsilon=0.2):
     env.close()
 
 
-
-
-# alpha_list = [0.2, 0.4, 0.6, 0.8]
-# eplison_list = [0.2, 0.3, 0.4, 0.5]
-
-
-# alpha_list = [0.005, 0.01, 0.015, 0.02, 0.025]
-alpha_list= [round(i, 7) for i in np.linspace(0.000001, 0.1, 10).tolist()]
+alpha_list= [round(i, 7) for i in np.linspace(0.000001, 0.3, 10).tolist()]
 eplison_list = [0.2, 0.3, 0.4, 0.5]
 for alpha in alpha_list:
     for epsilon in eplison_list:
         cross_lake(alpha, epsilon)
 
+# Show or save the graph 
+
+x = [i for i in range(0, 100001, 500)]
+iter_num = 0
+for alpha in alpha_list:
+    for epsilon in eplison_list:
+        value = success_per_episode_dict[(alpha, epsilon)]
+        # plt.plot(x, value, label=f'alpha: {alpha}, epsilon: {epsilon}')
+        plt.plot(x, value, label=f'alpha: {alpha}, epsilon: {epsilon}, final value: {value[-1]}')
+        plt.legend()
+    
+    # To plot the graph uncomment the below line 
+    # plt.show()
+    # To save the graph
+    plt.savefig(f'./plot_res/result_{iter_num}.png')
+    iter_num += 1
+    plt.close()  
+    
+    
+    
+# Since the results were poor, I tried to use diffent epsilon values
+
+alpha_list= [round(i, 7) for i in np.linspace(0.000001, 0.3, 10).tolist()]
+eplison_list = [0.05, 0.1, 0.15, 0.2]
+for alpha in alpha_list:
+    for epsilon in eplison_list:
+        cross_lake(alpha, epsilon)
+
+
 plt.figure(figsize=(10, 8))
 x = [i for i in range(0, 100001, 500)]
-for key, value in success_per_episode_dict.items():
-    plt.plot(x, value, label=f'alpha: {key[0]}, epsilon: {key[1]}')
-    plt.legend()
-plt.show()
+iter_num = 0
+for alpha in alpha_list:
+    for epsilon in eplison_list:
+        value = success_per_episode_dict[(alpha, epsilon)]
+        # plt.plot(x, value, label=f'alpha: {alpha}, epsilon: {epsilon}')
+        plt.plot(x, value, label=f'alpha: {alpha}, epsilon: {epsilon}, final value: {value[-1]}')
+        plt.legend()
+    # To plot the graph uncomment the below line 
+    # plt.show()
+    # To save the graph
+    plt.savefig(f'./plot_res0/result_{iter_num}.png')
+    iter_num += 1
+    plt.close()  
+    
+
+# Save the dictionary for future use
+with open('success_per_episode_dict.pickle', 'wb') as f:
+    pickle.dump(success_per_episode_dict, f, pickle.HIGHEST_PROTOCOL)
+plt.figure(figsize=(10, 8))
