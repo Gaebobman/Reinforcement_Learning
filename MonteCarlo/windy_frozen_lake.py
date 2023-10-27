@@ -108,7 +108,6 @@ for alpha in alpha_list:
     
     
 # Since the results were poor, I tried to use diffent epsilon values
-
 alpha_list= [round(i, 7) for i in np.linspace(0.000001, 0.3, 10).tolist()]
 eplison_list = [0.05, 0.1, 0.15, 0.2]
 for alpha in alpha_list:
