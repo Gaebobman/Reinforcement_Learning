@@ -2,7 +2,6 @@ import gym
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 SEED = 1314
 
 def q_learning(LR, DSCT, RES_IDX):
@@ -31,7 +30,7 @@ def q_learning(LR, DSCT, RES_IDX):
     print("Final Q-Table Values")
     print(Q)        
     plt.bar(range(len(rList)), rList, color='blue')
-    plt.title(f'Learning Rate: {(1-LR):.3f}, Discount: {DSCT}, Score: {score}')
+    plt.title(f'Learning Rate: {(LR):.3f}, Discount: {DSCT}, Score: {score}')
     plt.savefig(f'./plot_res/result_{RES_IDX}.png')
     plt.show()
     env.close()
